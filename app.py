@@ -55,11 +55,11 @@ def get_data(link):
     return df 
 
 
-df = get_data('http://crimproject.org/data/observations/')
+df = pd.json_normalize(json.load(open("observations.json")))
 df.rename(columns={'piece.piece_id':'piece_piece_id',
                     'observer.name' : 'observer_name'}, inplace=True)
 
-df_r = get_data('http://crimproject.org/data/relationships/')
+df_r = pd.json_normalize(json.load(open("relationships.json")))
 df_r.rename(columns={'piece.piece_id':'piece_piece_id', 
                     'observer.name':'observer_name',
                     'model_observation.piece.piece_id':'model_observation_piece_piece_id',
