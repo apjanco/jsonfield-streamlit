@@ -8,7 +8,7 @@ import altair as alt
 from pandas.io.json import json_normalize
 import base64
 import SessionState
-
+import json
 # sets up function to call Markdown File for "about"
 def read_markdown_file(markdown_file):
     return Path(markdown_file).read_text()
