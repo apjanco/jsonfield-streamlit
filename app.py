@@ -287,7 +287,7 @@ mmt_selected = st.radio('', mmt_list)
 mmt_selected_list = list(mmt_selected)
 
 if mmt_selected_list:
-    masked_mmt = rt_full['model_observation.musical_type'].isin([mmt_selected])
+    masked_mmt = rt_full['relationship_type'].isin([mmt_selected])
     mmt_full = rt_full[masked_mmt]
 
 else:
