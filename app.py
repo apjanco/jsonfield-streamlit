@@ -45,16 +45,14 @@ st.header("CRIM Project Meta Data Viewer (JSONField)")
 # st.cache speeds things up by holding data in cache
 
 @st.cache(allow_output_mutation=True)
-
-# get the data function 
 def get_data(link):
     data = requests.get(link).json()
     #df = pd.DataFrame(data)
     df = pd.json_normalize(data)
     return df 
 
-df = get_data('http://127.0.0.1:8000/data/observations/')
-df_r = get_data('http://127.0.0.1:8000/data/relationships/')
+df = get_data('http://crimproject.org/data/observations/')
+df_r = get_data('http://crimproject.org/data/relationships/')
 
 select_data = df[["id", "observer", "musical_type"]]
 select_data_r = df_r[["id", "observer", "relationship_type"]]
