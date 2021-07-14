@@ -7,6 +7,7 @@ import numpy as np
 from pandas.io.json import json_normalize
 import base64
 import SessionState
+import json 
 
 # sets up function to call Markdown File for "about"
 def read_markdown_file(markdown_file):
@@ -51,11 +52,11 @@ def get_data(link):
     df = pd.json_normalize(data)
     return df 
 
-df = get_data('http://crimproject.org/data/observations/')
-df_r = get_data('http://crimproject.org/data/relationships/')
+df = pd.json_normalize(json.load(open("observations.json")))
+df_r = pd.json_normalize(json.load(open("relationships.json")))
 
-select_data = df[["id", "observer", "musical_type"]]
-select_data_r = df_r[["id", "observer", "relationship_type"]]
+select_data = df[["id", "observer.name", "musical_type"]]
+select_data_r = df_r[["id", "observer.name", "relationship_type"]]
 
 # Sidebar options for _all_ data of a particular type
 
@@ -71,7 +72,7 @@ if st.sidebar.checkbox('Show Selected Metadata:  Observer, Type'):
 
 if st.sidebar.checkbox('Show Total Observations per Analyst'):
     st.subheader('Total Observations per Analyst')
-    st.write(df['observer'].value_counts())  
+    st.write(df['observer.name'].value_counts())  
 
 
 if st.sidebar.checkbox('Show Total Observations per Musical Type'):
@@ -177,7 +178,7 @@ order = st.radio("Select order: ", ('Observer then Type', 'Type then Observer'))
 if (order == 'Observer then Type'):
     #filter by observer
     st.subheader("Observer")
-    observer_frames = filter_by('observer', select_data, df, 'a')
+    observer_frames = filter_by('observer.name', select_data, df, 'a')
     observer_full = observer_frames[0]
     observer_sub = observer_frames[1]
     #st.write(observer_full)
@@ -199,7 +200,7 @@ else:
 
     #filter by observer
     st.subheader("Observer")
-    observer_frames = filter_by('observer', mt_sub, mt_full, 'y')
+    observer_frames = filter_by('observer.name', mt_sub, mt_full, 'y')
     observer_full = observer_frames[0]
     observer_sub = observer_frames[1]
     st.markdown('Resulting observations:')
@@ -236,7 +237,7 @@ def inp_det(type):
     if type == 'musical type':
         st.write('Enter name (Fuga/PEN)')
         mtype = st.text_input('musical type name')
-    elif type == 'observer':
+    elif type == 'observer.name':
         st.write('Enter name (Alice/Bob)')
         mtype = st.text_input('observer name')
     return mtype
@@ -265,14 +266,14 @@ st.write(df_r)
 
 #filter by observer
 st.subheader("Observer")
-observer_frames_r = filter_by('observer', select_data_r, df_r, 'c')
+observer_frames_r = filter_by('observer.name', select_data_r, df_r, 'c')
 observer_full_r = observer_frames_r[0]
 observer_sub_r = observer_frames_r[1]
 st.write(observer_full_r)
 
 #filter by type with or without observer
 st.subheader("Relationship Type")
-rt_frames = filter_by('observer', observer_sub_r, observer_full_r, 'd')
+rt_frames = filter_by('observer.name', observer_sub_r, observer_full_r, 'd')
 rt_full = observer_frames_r[0]
 rt_sub = observer_frames_r[1]
 st.write(rt_full)
