@@ -5,4 +5,3 @@ pandas
 pandas-io
 numpy
 altair
-
